@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test Pixi JS</title>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="show-shapes">
+        <p class="show-shapes__current-number">
+          Number of current shapes
+          <span class="show-shapes__value value__current-number">0</span>
+        </p>
+        <p class="show-shapes__surface-area">
+          Surface area ouccupied by shapes
+          <span class="show-shapes__value value__surface-area">0</span>
+        </p>
+      </div>
+
+      <div class="view"></div>
+
+      <div class="container-interface">
+        <div class="btn-wrapper shapes-number">
+          <button
+            class="btn btn-decrement"
+            data-action="shapes-number__decrement"
+          >
+            -
+          </button>
+          <button
+            class="btn btn-increment"
+            data-action="shapes-number__increment"
+          >
+            +
+          </button>
+        </div>
+        <div class="interface-value">
+          Number of shapes per sec
+          <span class="interface-value__show" data-name="number-second">1</span>
+        </div>
+        <div class="btn-wrapper graviti-value">
+          <button
+            class="btn btn-decrement"
+            data-action="gravity-value__decrement"
+          >
+            -
+          </button>
+          <button
+            class="btn btn-increment"
+            data-action="gravity-value__increment"
+          >
+            +
+          </button>
+        </div>
+        <div class="interface-value">
+          Graviti value
+          <span class="interface-value__show" data-name="graviti-value">1</span>
+        </div>
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

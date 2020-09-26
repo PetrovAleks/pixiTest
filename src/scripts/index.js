@@ -1,15 +1,4 @@
-import {
-  setRandomShapes,
-  setRandomColor,
-  setRandomPosition,
-  shapesPerSec,
-  createShapes,
-} from './scripts';
+import ShapeMethods from './ShapeMethods';
+import { setRandomPosition, shapesPerSec } from './scripts';
 
-export {
-  setRandomShapes,
-  setRandomColor,
-  setRandomPosition,
-  createShapes,
-  shapesPerSec,
-};
+export { setRandomPosition, shapesPerSec, ShapeMethods };

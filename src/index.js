@@ -1,25 +1,22 @@
-import { App } from './app';
+import { App, Shapes } from './app';
 import refs from './refs';
 
 import './styles.css';
 
-import {
-  setRandomShapes,
-  setRandomColor,
-  setRandomPosition,
-  createShapes,
-  shapesPerSec,
-} from './scripts';
+import { setRandomPosition, shapesPerSec } from './scripts';
 
 const app = new App();
 
+app.createApp();
+app.createBackBackground();
+
 app.bgshapes.on('click', e => {
   const position = e.data.global;
-  createShapes(position);
+  new Shapes(position);
 });
 
 setInterval(() => {
   for (let i = 1; i <= shapesPerSec; i += 1) {
-    createShapes(setRandomPosition());
+    new Shapes(setRandomPosition());
   }
 }, 1000);

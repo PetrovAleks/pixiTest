@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { ShapeMethods } from '../scripts';
 import './app.css';
 import refs from '../refs';
 const { div } = refs;
@@ -8,9 +9,17 @@ const app = new PIXI.Application({
   backgroundColor: 0x4e3030,
 });
 
-class App {
+class App extends ShapeMethods {
   constructor() {
-    this.bgshapes = new PIXI.Graphics();
+    super();
+  }
+  bgshapes = new PIXI.Graphics();
+
+  createApp() {
+    return div.appendChild(app.view);
+  }
+
+  createBackBackground() {
     this.bgshapes.lineStyle(0, 0xffffff, 1);
     this.bgshapes.beginFill(0, 0xffffff, 1);
     this.bgshapes.drawRect(0, 0, 1100, 400);
@@ -18,14 +27,15 @@ class App {
     app.stage.addChild(this.bgshapes);
     this.bgshapes.interactive = true;
   }
-  doc = div.appendChild(app.view);
 }
-class Shapes {
-  constructor({ x, y }, randomShapes, randomColor) {
+
+class Shapes extends App {
+  constructor({ x, y }) {
+    super();
     this.shapes = new PIXI.Graphics();
     this.shapes.lineStyle(0, 0xffffff, 1);
-    this.shapes.beginFill(randomColor());
-    randomShapes(this.shapes);
+    this.shapes.beginFill(this.setRandomColor());
+    this.setRandomShapes();
     this.shapes.endFill();
     this.shapes.x = x;
     this.shapes.y = y;
@@ -33,6 +43,7 @@ class Shapes {
     this.shapes.buttonMode = true;
     this.shapes.surfaceArea;
     app.stage.addChild(this.shapes);
+    this.loweringShapes();
   }
 }
 export { App, Shapes };

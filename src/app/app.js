@@ -18,7 +18,7 @@ const GRAVITI_INCREMENT = 'gravity-value__increment';
 const GRAVITI_DECREMENT = 'gravity-value__decrement';
 const BOARD_WIDTH = 1100;
 const BOARD_HEUGHT = 400;
-const MAX_SHAPE_SIZE = 150;
+const MAX_SHAPE_SIZE = 50;
 
 export default class App {
   app = null;

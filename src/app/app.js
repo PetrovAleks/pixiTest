@@ -1,49 +1,48 @@
 import * as PIXI from 'pixi.js';
-import { ShapeMethods } from '../scripts';
+import { ShapeService } from '../scripts';
 import './app.css';
 import refs from '../refs';
 const { div } = refs;
-const app = new PIXI.Application({
-  width: 1100,
-  height: 400,
-  backgroundColor: 0x4e3030,
-});
 
-class App extends ShapeMethods {
+export default class App {
+  app = null;
+  backGroundApp = null;
+  shapes = null;
+  shapeService = new ShapeService();
   constructor() {
-    super();
+    this.app = new PIXI.Application({
+      width: 1100,
+      height: 400,
+      backgroundColor: 0x4e3030,
+    });
+    this.backGroundApp = new PIXI.Graphics();
   }
-  bgshapes = new PIXI.Graphics();
 
-  createApp() {
-    return div.appendChild(app.view);
+  start() {
+    div.appendChild(this.app.view);
+    this.backGroundApp.lineStyle(0, 0xffffff, 1);
+    this.backGroundApp.beginFill(0, 0xffffff, 1);
+    this.backGroundApp.drawRect(0, 0, 1100, 400);
+    this.backGroundApp.endFill();
+    this.app.stage.addChild(this.backGroundApp);
+    this.backGroundApp.interactive = true;
+    this.backGroundApp.on('click', e => {
+      const position = e.data.global;
+      this.renderShapes(position);
+    });
   }
-
-  createBackBackground() {
-    this.bgshapes.lineStyle(0, 0xffffff, 1);
-    this.bgshapes.beginFill(0, 0xffffff, 1);
-    this.bgshapes.drawRect(0, 0, 1100, 400);
-    this.bgshapes.endFill();
-    app.stage.addChild(this.bgshapes);
-    this.bgshapes.interactive = true;
-  }
-}
-
-class Shapes extends App {
-  constructor({ x, y }) {
-    super();
+  renderShapes({ x, y }) {
     this.shapes = new PIXI.Graphics();
     this.shapes.lineStyle(0, 0xffffff, 1);
-    this.shapes.beginFill(this.setRandomColor());
-    this.setRandomShapes();
+    this.shapes.beginFill(this.shapeService.setRandomColor());
+    this.shapeService.setRandomShapes(this.shapes);
     this.shapes.endFill();
+    this.shapes.surfaceArea;
     this.shapes.x = x;
     this.shapes.y = y;
     this.shapes.interactive = true;
     this.shapes.buttonMode = true;
-    this.shapes.surfaceArea;
-    app.stage.addChild(this.shapes);
-    this.loweringShapes();
+    this.app.stage.addChild(this.shapes);
+    this.shapeService.loweringShapes(this.shapes);
   }
 }
-export { App, Shapes };

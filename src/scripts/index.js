@@ -1,4 +1,4 @@
-import ShapeMethods from './ShapeMethods';
-import { setRandomPosition, shapesPerSec } from './scripts';
+import ShapeService from './ShapeService';
+import { setRandomPosition, shapesPerSec, shapesInterval } from './scripts';
 
-export { setRandomPosition, shapesPerSec, ShapeMethods };
+export { setRandomPosition, shapesPerSec, ShapeService, shapesInterval };

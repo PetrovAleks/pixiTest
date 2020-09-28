@@ -1,2 +1,2 @@
-import { App, Shapes } from './app';
-export { App, Shapes };
+import App from './app';
+export default App;

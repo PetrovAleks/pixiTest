@@ -51,5 +51,11 @@ function setGravitiValue(e) {
   }
   return (interfaceValueGraviti.innerHTML = gravitiValue);
 }
-
-export { setRandomPosition, shapesPerSec, gravitiValue };
+function shapesInterval(app) {
+  return setInterval(() => {
+    for (let i = 1; i <= shapesPerSec; i += 1) {
+      app.renderShapes(setRandomPosition());
+    }
+  }, 1000);
+}
+export { setRandomPosition, shapesInterval, shapesPerSec, gravitiValue };

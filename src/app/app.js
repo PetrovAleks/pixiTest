@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { ShapeService } from '../scripts';
+import { ShapeService } from '../service';
 import refs from '../refs';
 import './app.css';
 const {
@@ -36,8 +36,10 @@ export default class App {
       height: BOARD_HEUGHT,
       backgroundColor: 0x4e3030,
     });
-    this.backGroundApp = new PIXI.Graphics();
+    div.appendChild(this.app.view);
+
     this.shapeService = new ShapeService();
+    this.initStageBackground();
     this.initListeners();
   }
 
@@ -48,7 +50,7 @@ export default class App {
       }
       if (
         e.target?.dataset?.action === SHAPES_DECREMENT &&
-        this.shapesPerSec > 0
+        this.shapesPerSec >= 0
       ) {
         this.shapesPerSec -= 1;
       }
@@ -67,16 +69,20 @@ export default class App {
     });
   }
 
-  start() {
-    div.appendChild(this.app.view);
-    this.backGroundApp.lineStyle(0, 0xffffff, 1);
-    this.backGroundApp.beginFill(0, 0xffffff, 1);
-    this.backGroundApp.drawRect(0, 0, 1100, 400);
-    this.backGroundApp.endFill();
-    this.app.stage.addChild(this.backGroundApp);
-    this.backGroundApp.interactive = true;
-    this.backGroundApp.on('click', e => this.renderShape(e.data?.global));
+  initStageBackground() {
+    const backGroundApp = new PIXI.Graphics();
+    backGroundApp.lineStyle(0, 0xffffff, 1);
+    backGroundApp.beginFill(0, 0xffffff, 1);
+    backGroundApp.drawRect(0, 0, 1100, 400);
+    backGroundApp.endFill();
 
+    backGroundApp.interactive = true;
+    backGroundApp.on('click', e => this.renderShape(e.data?.global));
+
+    this.app.stage.addChild(backGroundApp);
+  }
+
+  start() {
     setInterval(() => this.drawShapes(), 1000);
   }
 
@@ -92,12 +98,12 @@ export default class App {
 
   renderShape({ x, y }) {
     const shape = new PIXI.Graphics();
+
     shape.lineStyle(0, 0xffffff, 1);
+
     shape.beginFill(this.shapeService.getRandomColor());
     this.shapeService.setRandomShapes(shape);
-
     shape.endFill();
-
     shape.x = x;
     shape.y = y;
     shape.interactive = true;
@@ -116,7 +122,8 @@ export default class App {
       shape.y = shape.y + this.gravitiValue;
 
       if (shape.y > 500) {
-        this.destroyShapes(setDestroy, shape);
+        clearInterval(destroyInterval);
+        this.destroyShape(shape);
       }
     }, 50);
 

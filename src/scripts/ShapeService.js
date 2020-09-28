@@ -4,6 +4,16 @@ const { interfaceValueCurrentNumber, interfaceValueSurfaceArea } = refs;
 export default class ShapeService {
   counterShapes = 0;
   surfaceAreaValue = 0;
+
+  getRandomPosition(min, max) {
+    const randomPositionX = Math.floor(Math.random() * max);
+    const startPosition = {
+      x: min + randomPositionX,
+      y: -50,
+    };
+    return startPosition;
+  }
+
   destroyShapes(setDestroy, shapes) {
     interfaceValueCurrentNumber.innerHTML = this.counterShapes -= 1;
     this.surfaceAreaValue = this.surfaceAreaValue - shapes.surfaceArea;
@@ -11,6 +21,7 @@ export default class ShapeService {
     shapes.destroy(true);
     clearInterval(setDestroy);
   }
+
   loweringShapes(shapes) {
     interfaceValueCurrentNumber.innerHTML = this.counterShapes += 1;
     this.surfaceAreaValue = this.surfaceAreaValue + shapes.surfaceArea;
@@ -27,7 +38,8 @@ export default class ShapeService {
       this.destroyShapes(setDestroy, shapes);
     });
   }
-  setRandomColor() {
+
+  getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '0x';
     for (let i = 0; i < 6; i += 1) {
@@ -35,21 +47,10 @@ export default class ShapeService {
     }
     return color;
   }
+  
   setRandomShapes(shapes) {
     const randomIndex = Math.floor(Math.random() * (7 - 1 + 1)) + 1;
-    if (randomIndex === 1) {
-      const ellipseWidth = 50;
-      const ellipseHeight = 20;
-      shapes.surfaceArea = Math.PI * ellipseWidth * ellipseHeight;
 
-      return shapes.drawEllipse(0, 0, ellipseWidth, ellipseHeight);
-    }
-    if (randomIndex === 2) {
-      const RCircle = 32;
-
-      shapes.surfaceArea = Math.PI * Math.pow(RCircle, 2);
-      return shapes.drawCircle(0, 0, RCircle);
-    }
     if (randomIndex === 3) {
       const RCircle = 60;
       shapes.surfaceArea = 1.12 * Math.pow(RCircle, 2);

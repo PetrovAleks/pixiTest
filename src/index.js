@@ -5,4 +5,3 @@ import './styles.css';
 
 const app = new App();
 app.start();
-shapesInterval(app);

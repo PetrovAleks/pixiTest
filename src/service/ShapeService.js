@@ -19,7 +19,7 @@ export default class ShapeService {
   }
 
   setRandomShapes(shape) {
-    const randomIndex = Math.floor(Math.random() * 6) + 1;
+    const randomIndex = Math.floor(Math.random() * (7 - 1) + 1);
 
     switch (randomIndex) {
       case 1:

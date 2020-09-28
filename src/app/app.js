@@ -94,10 +94,7 @@ export default class App {
     const shape = new PIXI.Graphics();
     shape.lineStyle(0, 0xffffff, 1);
     shape.beginFill(this.shapeService.getRandomColor());
-
-    const RCircle = 60;
-    shape.surfaceArea = 1.12 * Math.pow(RCircle, 2);
-    shape.drawStar(0, 0, 5, 60);
+    this.shapeService.setRandomShapes(shape);
 
     shape.endFill();
 

@@ -1,4 +1,3 @@
-import refs from '../refs';
 export default class ShapeService {
   getRandomPosition(min, max) {
     const randomPositionX = Math.floor(Math.random() * max);

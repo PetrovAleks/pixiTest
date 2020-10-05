@@ -27,7 +27,7 @@ export default class App {
   shapeService = null;
   shapesPerSec = 1;
   gravitiValue = 1;
-  counterShapes = 1;
+  counterShapes = 0;
   surfaceAreaValue = 0;
 
   constructor() {
@@ -50,7 +50,7 @@ export default class App {
       }
       if (
         e.target?.dataset?.action === SHAPES_DECREMENT &&
-        this.shapesPerSec >= 0
+        this.shapesPerSec > 1
       ) {
         this.shapesPerSec -= 1;
       }
@@ -96,19 +96,14 @@ export default class App {
     }
   }
 
-  renderShape({ x, y }) {
-    const shape = new PIXI.Graphics();
+  renderShape(coords) {
+    const newShape = new Shape(coords, this.shapeService, this.app);
+    const { shape } = newShape;
 
-    shape.lineStyle(0, 0xffffff, 1);
-
-    shape.beginFill(this.shapeService.getRandomColor());
-    this.shapeService.setRandomShapes(shape);
-    shape.endFill();
-    shape.x = x;
-    shape.y = y;
-    shape.interactive = true;
-    shape.buttonMode = true;
-    this.app.stage.addChild(shape);
+    this.app.ticker.add(() => {
+      shape.position.y += this.gravitiValue;
+      this.destroyShape(shape);
+    });
 
     this.counterShapes += 1;
     this.surfaceAreaValue += shape.surfaceArea;
@@ -118,27 +113,103 @@ export default class App {
     interfaceValueNumberSecond.innerHTML = this.shapesPerSec;
     interfaceValueGraviti.innerHTML = this.gravitiValue;
 
-    const destroyInterval = setInterval(() => {
-      shape.y = shape.y + this.gravitiValue;
-
-      if (shape.y > 500) {
-        clearInterval(destroyInterval);
-        this.destroyShape(shape);
-      }
-    }, 50);
-
     shape.on('click', e => {
-      clearInterval(destroyInterval);
-      this.destroyShape(shape);
+      shape.show = false;
+      console.log(shape);
+      this.toChangeСolor(shape, shape.name);
+      this.counterShapes -= 1;
+      this.surfaceAreaValue -= shape.surfaceArea;
+
+      interfaceValueCurrentNumber.innerHTML = this.counterShapes;
+      interfaceValueSurfaceArea.innerHTML = Math.floor(this.surfaceAreaValue);
+      shape.clear();
+    });
+  }
+  toChangeСolor(shape, name) {
+    shape.parent.children.forEach(element => {
+      if (element.name === name && element.show) {
+        element.clear();
+
+        element.beginFill(this.shapeService.getRandomColor());
+        switch (name) {
+          case 'circle':
+            return element.drawCircle(0, 0, 32);
+          case 'ellipse':
+            return element.drawEllipse(0, 0, 50, 25);
+          case 'star':
+            return element.drawStar(0, 0, 5, 60);
+          case 'rect':
+            return element.drawRect(0, 0, 50, 50);
+          case 'triangle':
+            return element.drawPolygon([-32, 64, 32, 64, 0, 0]);
+          case 'pentagon':
+            return element.drawPolygon([
+              -32,
+              32,
+              32,
+              32,
+              32,
+              -32,
+              -32,
+              -32,
+              -64,
+              0,
+            ]);
+          case 'hexagon':
+            return element.drawPolygon([
+              -64,
+              0,
+              -32,
+              32,
+              32,
+              32,
+              64,
+              0,
+              32,
+              -32,
+              -32,
+              -32,
+            ]);
+
+          default:
+            break;
+        }
+
+        element.endFill();
+        this.app.stage.addChild(element);
+      }
     });
   }
 
   destroyShape(shape) {
-    this.counterShapes -= 1;
-    this.surfaceAreaValue -= shape.surfaceArea;
+    if (shape.position.y > BOARD_HEUGHT + 50) {
+      shape.clear();
+    }
+    if (shape.position.y === BOARD_HEUGHT + 50) {
+      this.counterShapes -= 1;
+      this.surfaceAreaValue -= shape.surfaceArea;
 
-    interfaceValueCurrentNumber.innerHTML = this.counterShapes;
-    interfaceValueSurfaceArea.innerHTML = Math.floor(this.surfaceAreaValue);
-    shape.destroy(true);
+      interfaceValueCurrentNumber.innerHTML = this.counterShapes;
+      interfaceValueSurfaceArea.innerHTML = Math.floor(this.surfaceAreaValue);
+    }
+  }
+}
+
+class Shape {
+  shape = null;
+  constructor({ x, y }, shapeService, app) {
+    this.shape = new PIXI.Graphics();
+
+    this.shape.lineStyle(0, 0xffffff, 1);
+
+    this.shape.beginFill(shapeService.getRandomColor());
+    shapeService.setRandomShapes(this.shape);
+    this.shape.endFill();
+    this.shape.x = x;
+    this.shape.y = y;
+    this.shape.interactive = true;
+    this.shape.buttonMode = true;
+    this.shape.show = true;
+    app.stage.addChild(this.shape);
   }
 }

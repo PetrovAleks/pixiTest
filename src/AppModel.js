@@ -179,8 +179,13 @@ export default class AppModel {
   }
 
   toChangeСolor(shape, name) {
+    const { BOARD_HEUGHT } = this.APP_SIZE;
     shape.parent.children.forEach(element => {
-      if (element.name === name && element.show) {
+      if (
+        element.name === name &&
+        element.show &&
+        element.y <= BOARD_HEUGHT + 50
+      ) {
         element.clear();
 
         element.beginFill(this.getRandomColor());
